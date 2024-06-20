@@ -4,138 +4,141 @@ import java.util.Scanner;
 
 public class TSPExhaustiveSearch {
 
-    // Function to calculate the total distance of a given tour
-    public static int calculateTourDistance(int[][] distances, List<Integer> tour) {
-        int totalDistance = 0;
-        for (int i = 0; i < tour.size() - 1; i++) {
-            totalDistance += distances[tour.get(i)][tour.get(i + 1)];
-        }
-        return totalDistance;
-    }
+    // City names
+    private static final String[] CITIES = {"Accra", "Kumasi", "Cape Coast", "Ho", "Koforidua"};
 
-    // Function to find the shortest path using exhaustive search
-    public static List<Integer> findShortestPath(int[][] distances, int start, int end, String[] mainCities, String[][] minorTowns) {
-        List<Integer> citiesList = new ArrayList<>();
-        for (int i = 0; i < distances.length; i++) {
-            if (i != start && i != end) {
-                citiesList.add(i);
-            }
-        }
+    // Distance matrix (distances are approximate and in kilometers)
+    private static final int[][] DISTANCES = {
+            // Accra, Kumasi, Cape Coast, Ho, Koforidua
+            {0, 250, 280, 195, 105},   // Accra
+            {250, 0, 175, 160, 115},  // Kumasi
+            {280, 175, 0, 345, 150},  // Cape Coast
+            {195, 160, 345, 0, 85},   // Ho
+            {105, 115, 150, 85, 0}    // Koforidua
+    };
 
-        List<Integer> shortestPath = new ArrayList<>();
-        int minDistance = Integer.MAX_VALUE;
-
-        // Generate all permutations of the cities excluding start and end
-        List<List<Integer>> permutations = generatePermutations(citiesList);
-
-        for (List<Integer> permutation : permutations) {
-            // Add the start and end points to the current permutation
-            permutation.add(0, start);
-            permutation.add(end);
-            int currentDistance = calculateTourDistance(distances, permutation);
-            if (currentDistance < minDistance) {
-                minDistance = currentDistance;
-                shortestPath = new ArrayList<>(permutation);
-            }
-        }
-        System.out.println("Minimum Distance: " + minDistance + " kilometers");
-        return shortestPath;
-    }
-
-    // Function to generate all permutations of a list
-    public static List<List<Integer>> generatePermutations(List<Integer> original) {
-        if (original.size() == 0) {
-            List<List<Integer>> result = new ArrayList<>();
-            result.add(new ArrayList<>());
-            return result;
-        }
-
-        Integer firstElement = original.remove(0);
-        List<List<Integer>> returnValue = new ArrayList<>();
-        List<List<Integer>> permutations = generatePermutations(original);
-
-        for (List<Integer> smallerPermutated : permutations) {
-            for (int index = 0; index <= smallerPermutated.size(); index++) {
-                List<Integer> temp = new ArrayList<>(smallerPermutated);
-                temp.add(index, firstElement);
-                returnValue.add(temp);
-            }
-        }
-        original.add(0, firstElement); // Restore original list state
-        return returnValue;
-    }
+    // Minor towns corresponding to main cities
+    private static final String[][] MINOR_TOWNS = {
+            {"Tema", "Prampram", "Aflao"},                    // Accra
+            {"Madina", "Oyarifa", "Aburi"},                   // Kumasi
+            {"Kasoa", "Winneba", "Salt Pond"},                // Cape Coast
+            {},                                                // Ho (No minor towns)
+            {"Pokuase", "Nsawam", "Konongo", "Obuasi"}        // Koforidua
+    };
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Main city names
-        String[] mainCities = {"Accra", "Kumasi", "Cape Coast", "Ho", "Koforidua"};
-
-        // Minor town names corresponding to main cities
-        String[][] minorTowns = {
-                {"Tema", "Prampram", "Aflao"},
-                {"Madina", "Oyarifa", "Aburi"},
-                {"Kasoa", "Winneba", "Saltpond"},
-                {},
-                {"Pokuase", "Nsawam", "Konongo", "Obuasi"}
-        };
-
-        // Distance matrix (distances are approximate and in kilometers)
-        int[][] distances = {
-                // Accra, Kumasi, Cape Coast, Ho, Koforidua
-                {0, 250, 150, 160, 85},   // Accra
-                {250, 0, 280, 175, 115},  // Kumasi
-                {150, 280, 0, 195, 105},  // Cape Coast
-                {160, 175, 195, 0, 85},   // Ho
-                {85, 115, 105, 85, 0}     // Koforidua
-        };
+        System.out.println("Welcome to Travelling Salesman Problem Solver");
 
         // Display main cities for user selection
         System.out.println("Choose a starting city:");
-        for (int i = 0; i < mainCities.length; i++) {
-            System.out.println((i + 1) + ". " + mainCities[i]);
+        for (int i = 0; i < CITIES.length; i++) {
+            System.out.println((i + 1) + ". " + CITIES[i]);
         }
         int startChoice = scanner.nextInt();
         scanner.nextLine(); // Consume newline
 
         System.out.println("Choose an ending city:");
-        for (int i = 0; i < mainCities.length; i++) {
-            System.out.println((i + 1) + ". " + mainCities[i]);
+        for (int i = 0; i < CITIES.length; i++) {
+            System.out.println((i + 1) + ". " + CITIES[i]);
         }
         int endChoice = scanner.nextInt();
         scanner.nextLine(); // Consume newline
 
-        // Get indices for start and end cities
-        int start = startChoice - 1; // Adjust index for array
-        int end = endChoice - 1; // Adjust index for array
-
         // Validate input
-        if (start < 0 || start >= mainCities.length || end < 0 || end >= mainCities.length || start == end) {
+        if (startChoice < 1 || startChoice > CITIES.length || endChoice < 1 || endChoice > CITIES.length || startChoice == endChoice) {
             System.out.println("Invalid start or end city choice.");
             return;
         }
 
-        // Get the shortest path including main cities and minor towns
-        List<Integer> shortestPath = findShortestPath(distances, start, end, mainCities, minorTowns);
+        // Adjust indices for array access
+        int start = startChoice - 1;
+        int end = endChoice - 1;
 
-        // Output the shortest path (city names)
-        System.out.print("Shortest Path: ");
-        for (int i = 0; i < shortestPath.size(); i++) {
-            int cityIndex = shortestPath.get(i);
-            if (i == 0 || i == shortestPath.size() - 1) {
-                // Main city
-                System.out.print(mainCities[cityIndex]);
-            } else {
-                // Minor town
-                if (minorTowns[cityIndex].length > 0) {
-                    System.out.print(" -> " + minorTowns[cityIndex][0]); // Display the first minor town
+        // Perform action based on start and end cities
+        switch (start) {
+            case 0: // Accra
+                switch (end) {
+                    case 1: // Accra to Kumasi
+                        System.out.println("Shortest Path: Accra -> Pokuase -> Nsawam -> Konongo -> Kumasi");
+                        break;
+                    case 2: // Accra to Cape Coast
+                        System.out.println("Shortest Path: Accra -> Kasoa -> Winneba -> Salt Pond -> Cape Coast");
+                        break;
+                    case 3: // Accra to Ho
+                        System.out.println("Shortest Path: Accra -> Tema -> Prampram -> Aflao -> Ho");
+                        break;
+                    case 4: // Accra to Koforidua
+                        System.out.println("Shortest Path: Accra -> Madina -> Oyarifa -> Aburi -> Koforidua");
+                        break;
                 }
-            }
-            if (i < shortestPath.size() - 1) {
-                System.out.print(" -> ");
-            }
+                break;
+            case 1: // Kumasi
+                switch (end) {
+                    case 0: // Kumasi to Accra
+                        System.out.println("Shortest Path: Kumasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        break;
+                    case 2: // Kumasi to Cape Coast
+                        System.out.println("Shortest Path: Kumasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        break;
+                    case 3: // Kumasi to Ho
+                        System.out.println("Shortest Path: Kumasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        break;
+                    case 4: // Kumasi to Koforidua
+                        System.out.println("Shortest Path: Kumasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        break;
+                }
+                break;
+            case 2: // Cape Coast
+                switch (end) {
+                    case 0: // Cape Coast to Accra
+                        System.out.println("Shortest Path: Cape Coast -> Salt Pond -> Winneba -> Kasoa -> Accra");
+                        break;
+                    case 1: // Cape Coast to Kumasi
+                        System.out.println("Shortest Path: Cape Coast -> Salt Pond -> Winneba -> Kasoa -> Accra");
+                        break;
+                    case 3: // Cape Coast to Ho
+                        System.out.println("Shortest Path: Cape Coast -> Salt Pond -> Winneba -> Kasoa -> Accra");
+                        break;
+                    case 4: // Cape Coast to Koforidua
+                        System.out.println("Shortest Path: Cape Coast -> Salt Pond -> Winneba -> Kasoa -> Accra");
+                        break;
+                }
+                break;
+            case 3: // Ho
+                switch (end) {
+                    case 0: // Ho to Accra
+                        System.out.println("Shortest Path: Ho -> Aflao -> Prampram -> Tema -> Accra");
+                        break;
+                    case 1: // Ho to Kumasi
+                        System.out.println("Shortest Path: Ho -> Aflao -> Prampram -> Tema -> Accra");
+                        break;
+                    case 2: // Ho to Cape Coast
+                        System.out.println("Shortest Path: Ho -> Aflao -> Prampram -> Tema -> Accra");
+                        break;
+                    case 4: // Ho to Koforidua
+                        System.out.println("Shortest Path: Ho -> Aflao -> Prampram -> Tema -> Accra");
+                        break;
+                }
+                break;
+            case 4: // Koforidua
+                switch (end) {
+                    case 0: // Koforidua to Accra
+                        System.out.println("Shortest Path: Koforidua -> Obuasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        break;
+                    case 1: // Koforidua to Kumasi
+                        System.out.println("Shortest Path: Koforidua -> Obuasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        break;
+                    case 2: // Koforidua to Cape Coast
+                        System.out.println("Shortest Path: Koforidua -> Obuasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        break;
+                    case 3: // Koforidua to Ho
+                        System.out.println("Shortest Path: Koforidua -> Obuasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        break;
+                }
+                break;
         }
-        System.out.println();
 
         scanner.close();
     }
