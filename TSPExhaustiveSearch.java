@@ -56,7 +56,7 @@ public class TSPExhaustiveSearch {
         int start = startChoice - 1;
         int end = endChoice - 1;
 
-        // Perform action based on start and end cities
+    
         switch (start) {
             case 0: // Accra
                 switch (end) {
