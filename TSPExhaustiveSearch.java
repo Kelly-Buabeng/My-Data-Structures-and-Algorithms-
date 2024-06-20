@@ -19,11 +19,11 @@ public class TSPExhaustiveSearch {
 
     // Minor towns corresponding to main cities
     private static final String[][] MINOR_TOWNS = {
-            {"Tema", "Prampram", "Aflao"},                    // Accra
-            {"Madina", "Oyarifa", "Aburi"},                   // Kumasi
-            {"Kasoa", "Winneba", "Salt Pond"},                // Cape Coast
-            {},                                                // Ho (No minor towns)
-            {"Pokuase", "Nsawam", "Konongo", "Obuasi"}        // Koforidua
+            {"Tema", "Prampram", "Aflao"},                    
+            {"Madina", "Oyarifa", "Aburi"},                   
+            {"Kasoa", "Winneba", "Salt Pond"},                
+            {},                                                
+            {"Pokuase", "Nsawam", "Konongo", "Obuasi"}        
     };
 
     public static void main(String[] args) {
@@ -31,7 +31,7 @@ public class TSPExhaustiveSearch {
 
         System.out.println("Welcome to Travelling Salesman Problem Solver");
 
-        // Display main cities for user selection
+        
         System.out.println("Choose a starting city:");
         for (int i = 0; i < CITIES.length; i++) {
             System.out.println((i + 1) + ". " + CITIES[i]);
@@ -80,13 +80,13 @@ public class TSPExhaustiveSearch {
                         System.out.println("Shortest Path: Kumasi -> Konongo -> Nsawam -> Pokuase -> Accra");
                         break;
                     case 2: // Kumasi to Cape Coast
-                        System.out.println("Shortest Path: Kumasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        System.out.println("Shortest Path: Kumasi -> Via River Pra -> Cape Coast");
                         break;
                     case 3: // Kumasi to Ho
-                        System.out.println("Shortest Path: Kumasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        System.out.println("Shortest Path: Kumasi -> Konongo -> Nsawam -> Pokuase -> Accra -> Tema -> Prampram -> Aflao -> Ho");
                         break;
                     case 4: // Kumasi to Koforidua
-                        System.out.println("Shortest Path: Kumasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        System.out.println("Shortest Path: Kumasi -> Konongo -> Nsawam -> Aburi -> Koforidua");
                         break;
                 }
                 break;
@@ -96,13 +96,13 @@ public class TSPExhaustiveSearch {
                         System.out.println("Shortest Path: Cape Coast -> Salt Pond -> Winneba -> Kasoa -> Accra");
                         break;
                     case 1: // Cape Coast to Kumasi
-                        System.out.println("Shortest Path: Cape Coast -> Salt Pond -> Winneba -> Kasoa -> Accra");
+                        System.out.println("Shortest Path: Cape Coast -> Via River Pra -> Kumasi");
                         break;
                     case 3: // Cape Coast to Ho
-                        System.out.println("Shortest Path: Cape Coast -> Salt Pond -> Winneba -> Kasoa -> Accra");
+                        System.out.println("Shortest Path: Cape Coast -> Salt Pond -> Winneba -> Kasoa -> Accra -> Tema -> Prampram -> Aflao -> Ho");
                         break;
                     case 4: // Cape Coast to Koforidua
-                        System.out.println("Shortest Path: Cape Coast -> Salt Pond -> Winneba -> Kasoa -> Accra");
+                        System.out.println("Shortest Path: Cape Coast -> Salt Pond -> Winneba -> Kasoa -> Accra -> Madina -> Oyarifa -> Aburi -> Koforidua");
                         break;
                 }
                 break;
@@ -115,26 +115,26 @@ public class TSPExhaustiveSearch {
                         System.out.println("Shortest Path: Ho -> Aflao -> Prampram -> Tema -> Accra");
                         break;
                     case 2: // Ho to Cape Coast
-                        System.out.println("Shortest Path: Ho -> Aflao -> Prampram -> Tema -> Accra");
+                        System.out.println("Shortest Path: Ho -> Aflao -> Prampram -> Tema -> Accra -> Kasoa -> Winneba -> Salt Pond -> Cape Coast");
                         break;
                     case 4: // Ho to Koforidua
-                        System.out.println("Shortest Path: Ho -> Aflao -> Prampram -> Tema -> Accra");
+                        System.out.println("Shortest Path: Ho -> Aflao -> Prampram -> Tema -> Accra -> Madina -> Adenta -> Oyarifa -> Aburi -> Koforidua");
                         break;
                 }
                 break;
             case 4: // Koforidua
                 switch (end) {
                     case 0: // Koforidua to Accra
-                        System.out.println("Shortest Path: Koforidua -> Obuasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        System.out.println("Shortest Path: Koforidua -> Aburi -> Oyarifa -> Adenta -> Madina -> Accra");
                         break;
                     case 1: // Koforidua to Kumasi
-                        System.out.println("Shortest Path: Koforidua -> Obuasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        System.out.println("Shortest Path: Koforidua -> Aburi -> Nsawam -> Obuasi -> Konongo -> Kumasi");
                         break;
                     case 2: // Koforidua to Cape Coast
-                        System.out.println("Shortest Path: Koforidua -> Obuasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        System.out.println("Shortest Path: Koforidua -> Aburi -> Oyarifa -> Adenta -> Madina -> Accra -> Kasoa -> Winneba -> Salt Pond -> Cape Coast");
                         break;
                     case 3: // Koforidua to Ho
-                        System.out.println("Shortest Path: Koforidua -> Obuasi -> Konongo -> Nsawam -> Pokuase -> Accra");
+                        System.out.println("Shortest Path: Koforidua -> Ho");
                         break;
                 }
                 break;
